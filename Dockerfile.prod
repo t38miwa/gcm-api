@@ -1,0 +1,34 @@
+# ビルドステージ
+# Golang 1.22を使用したAlpine Linuxをベースイメージとして指定します
+FROM golang:1.22-alpine AS builder
+
+# 作業ディレクトリを/appに設定します
+WORKDIR /app
+
+# 現在のディレクトリの内容をコンテナの作業ディレクトリにコピーします
+COPY . .
+
+# Goモジュールの依存関係をダウンロードします
+RUN go mod download
+
+# メインアプリケーションをビルドし、実行可能ファイルを/gcm-apiとして出力します
+RUN go build -o /gcm-api cmd/main.go
+
+# 実行ステージ
+# 最新のAlpine Linuxをベースイメージとして指定します
+FROM alpine:latest
+
+# 作業ディレクトリを/rootに設定します
+WORKDIR /root/
+
+# ビルドステージからビルドされた実行可能ファイルをコピーします
+COPY --from=builder /gcm-api .
+
+# .envファイルをコンテナにコピーします
+COPY .env .
+
+# コンテナがリッスンするポートを指定します
+EXPOSE 50051
+
+# コンテナ起動時に実行されるコマンドを指定します
+CMD ["./gcm-api"]
