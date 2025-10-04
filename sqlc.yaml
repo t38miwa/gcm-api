@@ -1,0 +1,13 @@
+# sqlc.yaml
+# このファイルは、sqlcツールを使用してSQLクエリからGoコードを生成するための設定ファイルです。
+
+version: "2" # sqlcの設定ファイルのバージョンを指定します
+
+sql: # SQL関連の設定を開始します
+  - schema: "schema.sql" # スキーマファイルのパスを指定します
+    queries: "queries.sql" # クエリファイルのパスを指定します
+    engine: "postgresql" # 使用するデータベースエンジンを指定します
+    gen: # コード生成に関する設定を開始します
+      go: # Go言語用の設定を開始します
+        package: "generated" # 生成されるGoコードのパッケージ名を指定します
+        out: "internal/db/generated" # 生成されるGoコードの出力先ディレクトリを指定します
