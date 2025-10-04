@@ -1,0 +1,17 @@
+# ベースイメージとしてGolang 1.22を使用したAlpine Linuxを指定します
+FROM golang:1.22-alpine
+
+# 作業ディレクトリを/appに設定します
+WORKDIR /app
+
+# 現在のディレクトリの内容をコンテナの作業ディレクトリにコピーします
+COPY . .
+
+# Goモジュールの依存関係をダウンロードします
+RUN go mod download
+
+# コンテナがリッスンするポートを指定します
+EXPOSE 50051
+
+# コンテナ起動時に実行されるコマンドを指定します
+CMD ["go", "run", "cmd/main.go"]

@@ -1,0 +1,36 @@
+# docker-compose.yml
+# このファイルは、Docker Composeを使用して複数のコンテナを管理するための設定ファイルです。
+# ここでは、PostgreSQLデータベースとアプリケーションの2つのサービスを定義しています。
+
+version: '3.8' # Docker Composeのバージョンを指定します
+
+services: # サービスの定義を開始します
+  db: # データベースサービスの定義
+    image: postgres:14 # PostgreSQL 14のイメージを使用します
+    environment: # 環境変数を設定します
+      POSTGRES_USER: ${POSTGRES_USER} # 環境変数からPostgreSQLのユーザー名を設定します
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} # 環境変数からPostgreSQLのパスワードを設定します
+      POSTGRES_DB: ${POSTGRES_DB} # 環境変数からPostgreSQLのデータベース名を設定します
+    ports: # ポートのマッピングを設定します
+      - "15432:5432" # ホストのポート15432をコンテナのポート5432にマッピングします
+    volumes: # ボリュームのマウントを設定します
+      - db_data:/var/lib/postgresql/data # データを永続化するためのボリュームを設定します
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql # schema.sqlファイルをコンテナにマウントします
+
+  app: # アプリケーションサービスの定義
+    build: # イメージのビルド設定を定義します
+      context: . # 現在のディレクトリをビルドコンテキストとして使用します
+      dockerfile: Dockerfile.dev # Dockerfile.devを使用してアプリケーションのイメージをビルドします
+    ports: # ポートのマッピングを設定します
+      - "60051:50051" # ホストのポート60051をコンテナのポート50051にマッピングします
+    depends_on: # サービスの依存関係を定義します
+      - db # dbサービスが起動していることを前提とします
+    environment: # 環境変数を設定します
+      DATABASE_URL: ${DATABASE_URL} # 環境変数からデータベースのURLを設定します
+      JWT_SECRET: ${JWT_SECRET} # 環境変数からJWTの秘密鍵を設定します
+      MAX_REQUESTS_PER_MINUTE: ${MAX_REQUESTS_PER_MINUTE} # 1分あたりの最大リクエスト数を設定します
+    volumes: # ボリュームのマウントを設定します
+      - .:/app # ソースコードをコンテナにマウントして、ホットリロードを可能にします
+
+volumes: # ボリュームの定義を開始します
+  db_data: # db_dataという名前のボリュームを定義します

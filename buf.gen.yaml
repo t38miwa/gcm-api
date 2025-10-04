@@ -1,0 +1,28 @@
+# buf.gen.yaml
+# このファイルは、Bufツールを使用してプロトコルバッファ（Protocol Buffers）から
+# Go言語のコードを生成するための設定ファイルです。
+# ここでは、3つのプラグイン（go、go-grpc、connect-go）を使用してコードを生成します。
+
+# Go言語のコードを生成するコマンドの実行例:
+# ターミナルで以下のコマンドを実行します。
+# buf generate
+# このコマンドは、buf.gen.yamlファイルに基づいてコードを生成します。
+
+version: v1 # Bufツールの設定ファイルのバージョンを指定します
+
+plugins: # 使用するプラグインのリストを定義します
+  - name: go # Go言語用のコードを生成するプラグイン
+    out: gen # 生成されたコードを出力するディレクトリ
+    opt: # プラグインに渡すオプション
+      - paths=source_relative # コード生成先のディレクトリ構造をプロトコルバッファのファイル構造と同じにする
+
+  - name: go-grpc # gRPC用のGo言語コードを生成するプラグイン
+    out: gen # 生成されたコードを出力するディレクトリ
+    opt: # プラグインに渡すオプション
+      - paths=source_relative # コード生成先のディレクトリ構造をプロトコルバッファのファイル構造と同じにする
+      - require_unimplemented_servers=false # 未実装のgRPCサーバーの生成を無効にする
+
+  - name: connect-go # Connect用のGo言語コードを生成するプラグイン
+    out: gen # 生成されたコードを出力するディレクトリ
+    opt: # プラグインに渡すオプション
+      - paths=source_relative # コード生成先のディレクトリ構造をプロトコルバッファのファイル構造と同じにする
