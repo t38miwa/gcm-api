@@ -1,0 +1,41 @@
+// user.proto
+// このファイルは、UserServiceのプロトコルバッファ定義を提供します。
+// UserServiceは、ユーザーの登録（SignUp）と認証（SignIn）を行うサービスです。
+
+syntax = "proto3"; // プロトコルバッファのバージョンを指定します
+
+package memo.v1; // パッケージ名を指定します
+
+option go_package = "gcm-api/gen/memo/v1;memov1"; // Goコード生成時のパッケージ名を指定します
+
+// UserService は、ユーザーの登録（SignUp）と認証（SignIn）を行うサービスです。
+service UserService {
+  // SignUp メソッドは、SignUpRequest を受け取り、SignUpResponse を返します。
+  rpc SignUp (SignUpRequest) returns (SignUpResponse);
+  // SignIn メソッドは、SignInRequest を受け取り、SignInResponse を返します。
+  rpc SignIn (SignInRequest) returns (SignInResponse);
+}
+
+// SignUpRequest は、SignUp メソッドに渡されるリクエストメッセージです。
+message SignUpRequest {
+  string username = 1; // 登録するユーザーのユーザー名を指定します
+  string password = 2; // 登録するユーザーのパスワードを指定します
+}
+
+// SignUpResponse は、SignUp メソッドから返されるレスポンスメッセージです。
+message SignUpResponse {
+  string token = 1; // 登録後に発行されるJWTトークンを含みます
+  string user_id = 2; // 登録されたユーザーのIDを含みます
+}
+
+// SignInRequest は、SignIn メソッドに渡されるリクエストメッセージです。
+message SignInRequest {
+  string username = 1; // 認証するユーザーのユーザー名を指定します
+  string password = 2; // 認証するユーザーのパスワードを指定します
+}
+
+// SignInResponse は、SignIn メソッドから返されるレスポンスメッセージです。
+message SignInResponse {
+  string token = 1; // 認証後に発行されるJWTトークンを含みます
+  string user_id = 2; // 認証されたユーザーのIDを含みます
+}

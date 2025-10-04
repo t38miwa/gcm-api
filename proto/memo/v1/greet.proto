@@ -1,0 +1,25 @@
+// greet.proto
+// このファイルは、GreetServiceのプロトコルバッファ定義を提供します。
+// GreetServiceは、指定された名前に対して挨拶を返すサービスです。
+
+syntax = "proto3"; // プロトコルバッファのバージョンを指定します
+
+package memo.v1; // パッケージ名を指定します
+
+option go_package = "gcm-api/gen/memo/v1;memov1"; // Goコード生成時のパッケージ名を指定します
+
+// GreetService は、指定された名前に対して挨拶を返すサービスです。
+service GreetService {
+  // Greet メソッドは、GreetRequest を受け取り、GreetResponse を返します。
+  rpc Greet (GreetRequest) returns (GreetResponse);
+}
+
+// GreetRequest は、Greet メソッドに渡されるリクエストメッセージです。
+message GreetRequest {
+  string name = 1; // 挨拶する相手の名前を指定します
+}
+
+// GreetResponse は、Greet メソッドから返されるレスポンスメッセージです。
+message GreetResponse {
+  string greeting = 1; // 挨拶のメッセージを含みます
+}
