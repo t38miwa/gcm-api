@@ -1,0 +1,59 @@
+// memo.proto
+// このファイルは、MemoServiceのプロトコルバッファ定義を提供します。
+// MemoServiceは、メモの作成、取得、リストを行うサービスです。
+
+syntax = "proto3"; // プロトコルバッファのバージョンを指定します
+
+package memo.v1; // パッケージ名を指定します
+
+option go_package = "gcm-api/gen/memo/v1;memov1"; // Goコード生成時のパッケージ名を指定します
+
+// MemoService は、メモの作成、取得、リストを行うサービスです。
+service MemoService {
+  // ListMemos メソッドは、ListMemosRequest を受け取り、ListMemosResponse を返します。
+  rpc ListMemos (ListMemosRequest) returns (ListMemosResponse);
+  // GetMemo メソッドは、GetMemoRequest を受け取り、GetMemoResponse を返します。
+  rpc GetMemo (GetMemoRequest) returns (GetMemoResponse);
+  // CreateMemo メソッドは、CreateMemoRequest を受け取り、CreateMemoResponse を返します。
+  rpc CreateMemo (CreateMemoRequest) returns (CreateMemoResponse);
+}
+
+// ListMemosRequest は、ListMemos メソッドに渡されるリクエストメッセージです。
+message ListMemosRequest {
+  string user_id = 1; // メモをリストするユーザーのIDを指定します
+}
+
+// ListMemosResponse は、ListMemos メソッドから返されるレスポンスメッセージです。
+message ListMemosResponse {
+  repeated Memo memos = 1; // メモのリストを含みます
+}
+
+// GetMemoRequest は、GetMemo メソッドに渡されるリクエストメッセージです。
+message GetMemoRequest {
+  string user_id = 1; // メモを取得するユーザーのIDを指定します
+  string memo_id = 2; // 取得するメモのIDを指定します
+}
+
+// GetMemoResponse は、GetMemo メソッドから返されるレスポンスメッセージです。
+message GetMemoResponse {
+  Memo memo = 1; // 取得されたメモを含みます
+}
+
+// CreateMemoRequest は、CreateMemo メソッドに渡されるリクエストメッセージです。
+message CreateMemoRequest {
+  string user_id = 1; // メモを作成するユーザーのIDを指定します
+  string content = 2; // 作成するメモの内容を指定します
+}
+
+// CreateMemoResponse は、CreateMemo メソッドから返されるレスポンスメッセージです。
+message CreateMemoResponse {
+  Memo memo = 1; // 作成されたメモを含みます
+}
+
+// Memo は、メモの情報を表すメッセージです。
+message Memo {
+  string id = 1; // メモのIDを指定します
+  string user_id = 2; // メモを作成したユーザーのIDを指定します
+  string content = 3; // メモの内容を指定します
+  string created_at = 4; // メモの作成日時を指定します
+}
